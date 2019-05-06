@@ -1,14 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { BrowserRouter } from 'react-router-dom';
 import App from "Components/App";
-
-let HelloWorld = () => {
-  return (
-    <h1>Hello there World!</h1>
-  )
-}
+import './index.scss';
 
 ReactDOM.render(
-  <App/>,
+  <BrowserRouter>
+    <App/>
+  </BrowserRouter>,
   document.getElementById("root")
 );

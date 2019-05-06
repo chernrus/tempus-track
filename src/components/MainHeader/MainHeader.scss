@@ -1,0 +1,31 @@
+.main-header {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  background-color: lightGrey;
+  position: fixed;
+  z-index: 20;
+  left: 0;
+  top: 0;
+  user-select: none;
+  width: 100%;
+  background-color: #d9f5ff;
+}
+
+.main-header.change {
+}
+
+.main-header__title {
+  padding: 0 10px;
+}
+
+.main-header__title h1 {
+  padding: 10px 0;
+  margin: 0;
+}
+
+@media only screen and (max-width: 600px) {
+  .main-header.change {
+  }
+}
