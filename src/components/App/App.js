@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import MainHeader from 'Components/MainHeader';
-import Home from 'Components/Home';
+import TimeTracker from 'Components/TimeTracker';
 import About from 'Components/About';
 import Contact from 'Components/Contact';
 import './App.scss';
@@ -10,8 +10,6 @@ import './App.scss';
 class App extends Component {
   constructor() {
     super();
-    this.mainContainer = React.createRef();
-    // this.mainHeader = React.createRef();
   }
 
   render() {
@@ -20,7 +18,7 @@ class App extends Component {
         <MainHeader/>
         <div className="app-container container">
           <Switch>
-            <Route exact path='/tracking' component={Home} />
+            <Route exact path='/tracking' component={TimeTracker} />
             <Route path='/desk' component={Contact} />
             <Route path='/pomodoro' component={About} />
           </Switch>
@@ -31,6 +29,3 @@ class App extends Component {
 }
 
 export default App;
-
-// <SideMenu/>
-// // <MainHeader ref={ this.mainHeader } title="asdf"/>

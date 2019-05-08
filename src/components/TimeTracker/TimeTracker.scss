@@ -1,0 +1,35 @@
+.time-tracker {
+  padding: 10px;
+  width: 620px;
+  display: flex;
+  flex-direction: column;
+}
+
+.time-tracker__header {
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.time-tracker__footer {
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.button-clear {
+  background-color: #F46E48;
+}
+
+.button-clear:hover {
+  background-color: #f19376;
+}
+
+
+@media only screen and (max-width: 600px) {
+  .time-tracker {
+    width: 100%;
+  }
+}

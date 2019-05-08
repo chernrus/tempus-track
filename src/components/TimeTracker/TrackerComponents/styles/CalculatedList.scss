@@ -1,0 +1,30 @@
+.calculated-list {
+  font-size: 18px;
+}
+
+.calculated-list__hedaer {
+  font-weight: 500;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+
+.calculated-list__title-time,
+.calculated-list__task-time {
+  min-width: 80px;
+}
+
+.calculated-list__item {
+  margin-bottom: 5px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+
+}
+
+.calculated-list__task-time,
+.calculated-list__task-name {
+  cursor: pointer;
+  border: none;
+}

@@ -9,6 +9,22 @@ body {
   font-family: Roboto, Tahoma, sans-serif;
 }
 
+button {
+  margin: 0;
+  padding: 0 16px;
+  border: none;
+  font-size: 16px;
+  height: 36px;
+  line-height: 36px;
+  cursor: pointer;
+  text-decoration: none;
+  color: #000;
+  background-color: #50b6ab;
+  text-align: center;
+  letter-spacing: .5px;
+  border-radius: 2px;
+}
+
 .container {
   padding: 0 20px;
 }
