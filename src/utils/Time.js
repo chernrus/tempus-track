@@ -37,10 +37,50 @@ var Time = (function () {
     return '0h 0m';
   }
 
+  function timeToText(time, format) { //time in seconds
+    let hours = 0,
+      minutes = 0,
+      seconds = 0,
+      timeStr = '00:00';
+
+    if(time < 60) {
+      minutes = 0;
+      seconds = time;
+    }
+    else if(time >= 60) {
+      minutes = Math.floor(time/60);
+      seconds = time - minutes*60;
+    }
+
+    if(minutes < 60) {
+      hours = 0;
+    }
+    else if(minutes >= 60) {
+      hours = Math.floor(minutes/60);
+      minutes = minutes - hours*60;
+    }
+
+    // console.log(hours, minutes, seconds);
+
+    switch (format) {
+      case 'mm:ss':
+        timeStr = `${(minutes > 9 ? minutes : `0${minutes}`)}:${(seconds > 9 ? seconds : `0${seconds}`)}`;
+        break;
+      case 'hh:mm':
+
+        break;
+      default:
+
+    }
+
+    return timeStr;
+  }
+
   return {
     isTime,
     getTime,
-    parseTimeFormat
+    parseTimeFormat,
+    timeToText
   }
 
 }());

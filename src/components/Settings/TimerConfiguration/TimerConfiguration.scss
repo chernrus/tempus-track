@@ -1,0 +1,23 @@
+.config__form {
+  width: 400px;
+}
+
+.config__block {
+  display: flex;
+  flex-direction: column;
+
+  h4 {
+    border-bottom: 1px solid #000;
+  }
+
+  input {
+  }
+
+  label {
+    margin: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}

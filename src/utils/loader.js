@@ -40,10 +40,30 @@ export const loader = (function(){
     });
   };
 
+  function saveSettings(data, key = 'timerSettings') {
+    console.log(data);
+    return new Promise((resolve, reject) => {
+      try {
+        window.localStorage.setItem(key, JSON.stringify(data));
+        reject({ status: 'ok' });
+      }
+      catch (e) {
+        console.log(e);
+        reject({ status: 'warning' });
+      }
+    });
+  }
+
+  function loadSettings(key = 'timerSettings') {
+    return getData(key);
+  }
+
   return {
     getData,
     saveData,
-    checkData
+    checkData,
+    loadSettings,
+    saveSettings
   }
 
 }());
