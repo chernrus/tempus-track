@@ -9,13 +9,16 @@ class Timer {
 
   start = () => {
     console.log('start timer');
-    this.tick(this.currentTime);
-    this.timer = setInterval(this.doTick, 1000 * this.step)
+    console.log(this.timer);
+    console.log(this.currentTime);
+    if(!this.timer) {
+      this.tick(this.currentTime);
+      this.timer = setInterval(this.doTick, 1000 * this.step)
+    }
   }
 
   doTick = () => {
     console.log('tick');
-    // console.log(this.currentTime, this.startTime);
 
     if(this.currentTime > 0 && !this.isPaused) {
       this.currentTime--;
@@ -36,6 +39,8 @@ class Timer {
   stop = () => {
     console.log('stop timer');
     clearInterval(this.timer);
+    this.timer = null;
+    this.doEnd();
   }
 
   set time(_time) {

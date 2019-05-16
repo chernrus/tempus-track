@@ -5,11 +5,15 @@ import Time from 'Utils/Time';
 import Timer from 'Utils/Timer';
 import ProgressBar from 'Components/ProgressBar';
 import PomodoroControl from 'Components/PomodoroControl';
+import PomodoroTask from 'Components/PomodoroTask';
 import TimerConfiguration from 'Components/Settings/TimerConfiguration';
+import { PomodoroController as pC } from './PomodoroController';
 
 class Pomodoro extends Component {
   constructor(props) {
     super(props);
+
+    this.timer = null;
 
     this.state = {
       timeText: '25:00',
@@ -22,22 +26,30 @@ class Pomodoro extends Component {
       currentType: 'focus',
       currentRound: 1,
       startTime: 10,
-      currentTime: 10, //25 min in seconds,
-      timer: null
+      remainTime: 10, //25 min in seconds,
+      state: 'stopped',
+      taskName: ''
     };
   }
 
   componentDidMount() {
     this.loadSettings();
-    const timer = new Timer({ time: this.state.currentTime, step: 1 });
-    timer.onTick = this.onTick;
 
-    this.setState({ timer });
   }
 
-  onTick = (currentTime) => {
-    console.log(currentTime);
-    this.setState({ currentTime })
+  saveCurrent = () => {
+
+  }
+
+  onTick = (remainTime) => {
+    console.log(remainTime);
+    this.setState({ remainTime });
+    this.saveCurrent();
+  }
+
+  onStop = () => {
+    console.log('stop');
+    this.timer.time = this.state.shortBreak*60;
   }
 
   loadSettings = () => {
@@ -50,7 +62,11 @@ class Pomodoro extends Component {
             sessionsInRound,
             goal
           } = res;
-          this.setState({ focusLength, shortBreak, longBreak, sessionsInRound, goal });
+          this.setState({ focusLength, shortBreak, longBreak, sessionsInRound, goal, remainTime: focusLength*60, startTime: focusLength*60  });
+          const timer = new Timer({ time: this.state.remainTime, step: 1 });
+          timer.onTick = this.onTick;
+          timer.onEnd = this.onStop;
+          this.timer = timer;
         },
         error => {console.log(error);}
       )
@@ -58,12 +74,14 @@ class Pomodoro extends Component {
 
   startTimer = () => {
     console.log('start');
-    this.state.timer.start();
+    this.timer.start();
+    this.setState({ state: 'started' });
   }
 
   pauseTimer = () => {
     console.log('pause');
-    this.state.timer.pause();
+    this.timer.pause();
+    this.setState({ state: 'paused' });
   }
 
   skipRound = () => {
@@ -77,11 +95,11 @@ class Pomodoro extends Component {
   render() {
 
     const {
-        currentTime,
+        remainTime,
         startTime
       } = this.state,
-      timeText = Time.timeToText(currentTime, 'mm:ss'),
-      percentage = this.getPercentage(currentTime, startTime);
+      timeText = Time.timeToText(remainTime, 'mm:ss'),
+      percentage = this.getPercentage(remainTime, startTime);
 
     console.log(percentage);
     return (
@@ -96,10 +114,12 @@ class Pomodoro extends Component {
           onStart={this.startTimer}
           onPause={this.pauseTimer}
           onSkip={this.skipCycle}/>
+        <PomodoroTask/>
+        <TimerConfiguration/>
       </div>
     );
   }
 }
 
-// <TimerConfiguration/>
+
 export default Pomodoro;

@@ -64,18 +64,15 @@ class TimerConfiguration extends Component {
   inputHandle = ({ target }) => {
     const name = target.name;
     let value = target.value;
-    console.log(typeof value);
+
     if(value < 0) {
       value = 0;
     };
 
-    if(value !== '') {
+    this.setState({
+      [name]: value
+    });
 
-      this.setState({
-        [name]: value
-      });
-
-    }
     // this.saveSettings();
   }
 

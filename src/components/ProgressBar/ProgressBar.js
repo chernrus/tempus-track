@@ -28,7 +28,6 @@ class ProgressBar extends Component {
     if(!text) text = `${percentage}%`;
     if(!textColor) textColor = progressColor;
 
-    console.log(backgroundColor);
     return (
       <svg
         width={ sqSize }
