@@ -2,19 +2,14 @@ import React, { Component } from 'react';
 import './ProgressBar.scss';
 
 class ProgressBar extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {};
-  }
 
   render() {
 
     const {
+      mode,
       sqSize,
       strokeWidth,
       percentage,
-      progressColor,
       backgroundColor,
       trackColor } = this.props,
 
@@ -23,7 +18,26 @@ class ProgressBar extends Component {
       dashArray = radius * Math.PI * 2,
       dashOffset = dashArray - dashArray * percentage / 100;
 
-    let { text, textColor } = this.props;
+    let modeText = '',
+      { text, textColor, progressColor } = this.props;
+
+    switch (mode) {
+      case 'focus':
+        progressColor = '#d9534f';
+        modeText = 'Get focused';
+        break;
+      case 'break':
+        progressColor = '#5cb85c';
+        modeText = 'Take a short break';
+        break;
+      case 'longBreak':
+        progressColor = '#decd54';
+        modeText = 'Take a long break';
+        break;
+      default:
+        progressColor = '#d9534f';
+        modeText = 'Get focused';
+    }
 
     if(!text) text = `${percentage}%`;
     if(!textColor) textColor = progressColor;
@@ -66,13 +80,24 @@ class ProgressBar extends Component {
         <text
           className="circle-text"
           x="50%"
-          y="50%"
+          y="40%"
           dy=".3em"
           textAnchor="middle"
           style={{
             fill: textColor
           }}>
           { `${text}` }
+        </text>
+        <text
+          className="mode-text"
+          x="50%"
+          y="70%"
+          dy=".3em"
+          textAnchor="middle"
+          style={{
+            fill: textColor
+          }}>
+          { `${modeText}` }
         </text>
       </svg>
     );
@@ -83,7 +108,7 @@ ProgressBar.defaultProps = {
   sqSize: 200,
   percentage: 25,
   strokeWidth: 10,
-  progressColor: '#ff0000',
+  progressColor: '#d9534f',
   backgroundColor: 'none',
   trackColor: '#ddd'
 };

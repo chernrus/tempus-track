@@ -7,7 +7,7 @@ import ProgressBar from 'Components/ProgressBar';
 import PomodoroControl from 'Components/PomodoroControl';
 import PomodoroTask from 'Components/PomodoroTask';
 import TimerConfiguration from 'Components/Settings/TimerConfiguration';
-import { PomodoroController as pC } from './PomodoroController';
+import { PomodoroController as PmdrCtrl} from './PomodoroController';
 
 class Pomodoro extends Component {
   constructor(props) {
@@ -23,7 +23,7 @@ class Pomodoro extends Component {
       longBreak: 30,
       goal: 12,
       sessionsInRound: 4,
-      currentType: 'focus',
+      mode: 'focus',
       currentRound: 1,
       startTime: 10,
       remainTime: 10, //25 min in seconds,
@@ -34,7 +34,42 @@ class Pomodoro extends Component {
 
   componentDidMount() {
     this.loadSettings();
+  }
 
+  loadSettings = () => {
+    loader.loadSettings('timerSettings')
+      .then(
+        res => {
+          const { focusLength,
+            shortBreak,
+            longBreak,
+            sessionsInRound,
+            goal
+          } = res;
+
+          PmdrCtrl.setConfig({
+            focusLength,
+            shortBreak,
+            longBreak,
+            sessionsInRound,
+            goal,
+            onTick: this.onTick,
+            onStop: this.onStop,
+            onChange: this.onChange
+          });
+
+          this.setState({
+            focusLength,
+            shortBreak,
+            longBreak,
+            sessionsInRound,
+            goal,
+            remainTime: focusLength*60,
+            startTime: focusLength*60
+          });
+        },
+        error => {console.log(error);}
+      )
   }
 
   saveCurrent = () => {
@@ -49,38 +84,40 @@ class Pomodoro extends Component {
 
   onStop = () => {
     console.log('stop');
-    this.timer.time = this.state.shortBreak*60;
+    // this.timer.time = this.state.shortBreak*60;
   }
 
-  loadSettings = () => {
-    loader.loadSettings('timerSettings')
-      .then(
-        res => {
-          const { focusLength,
-            shortBreak,
-            longBreak,
-            sessionsInRound,
-            goal
-          } = res;
-          this.setState({ focusLength, shortBreak, longBreak, sessionsInRound, goal, remainTime: focusLength*60, startTime: focusLength*60  });
-          const timer = new Timer({ time: this.state.remainTime, step: 1 });
-          timer.onTick = this.onTick;
-          timer.onEnd = this.onStop;
-          this.timer = timer;
-        },
-        error => {console.log(error);}
-      )
+  onChange = ({ mode, round, remain }) => {
+    let time = this.state.focusLength;
+    switch (mode) {
+      case 'focus':
+        time = this.state.focusLength;
+        break;
+      case 'break':
+        time = this.state.shortBreak;
+        break;
+      case 'longBreak':
+        time = this.state.longBreak;
+        break;
+    }
+    this.setState({
+      mode,
+      currentRound: round,
+      remainTime: remain,
+      startTime: time*60
+    });
+    console.log(this.state);
   }
 
   startTimer = () => {
     console.log('start');
-    this.timer.start();
+    PmdrCtrl.start();
     this.setState({ state: 'started' });
   }
 
   pauseTimer = () => {
     console.log('pause');
-    this.timer.pause();
+    PmdrCtrl.pause();
     this.setState({ state: 'paused' });
   }
 
@@ -96,12 +133,12 @@ class Pomodoro extends Component {
 
     const {
         remainTime,
-        startTime
+        startTime,
+        mode
       } = this.state,
       timeText = Time.timeToText(remainTime, 'mm:ss'),
       percentage = this.getPercentage(remainTime, startTime);
 
-    console.log(percentage);
     return (
       <div>
         <h2>Pomodoro (In developing)</h2>
@@ -109,13 +146,13 @@ class Pomodoro extends Component {
           strokeWidth="10"
           sqSize="200"
           percentage={ percentage }
-          text={ timeText }/>
+          text={ timeText }
+          mode={ mode }/>
         <PomodoroControl
+          mode={ mode }
           onStart={this.startTimer}
           onPause={this.pauseTimer}
           onSkip={this.skipCycle}/>
-        <PomodoroTask/>
-        <TimerConfiguration/>
       </div>
     );
   }
@@ -123,3 +160,6 @@ class Pomodoro extends Component {
 
 
 export default Pomodoro;
+
+// <PomodoroTask/>
+// <TimerConfiguration/>

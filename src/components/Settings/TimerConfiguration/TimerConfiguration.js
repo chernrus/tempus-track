@@ -85,7 +85,7 @@ class TimerConfiguration extends Component {
       sessionsInRound,
       goal
     } = this.state;
-    console.log(focusLength);
+    
     return (
       <div className="timer-config config">
         <div className="config__title">

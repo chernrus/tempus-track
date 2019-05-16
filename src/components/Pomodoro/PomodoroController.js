@@ -1,9 +1,10 @@
 import loader from 'Utils/loader';
 
-const PomodoroController = (function () {
+export const PomodoroController = (function () {
   let timer = null,
     _onTick = null,
     _onStop = null,
+    _onChange = null,
     _step = 1000,
     _remain = 0,
     _paused = false,
@@ -18,7 +19,7 @@ const PomodoroController = (function () {
 
 
   function _stop() {
-    clearInterval(timer);
+    if(timer) clearInterval(timer);
     timer = null;
     _state = 'stopped';
   }
@@ -28,15 +29,21 @@ const PomodoroController = (function () {
       _remain--;
       _onTick(_remain);
     }
-    else if(_remain === 0){
+    else if(_remain <= 0){
       _onTick(_remain);
-      _stop();
+      //_stop();
+      _changeMode();
     }
   }
 
-  function _changeMode(mode) {
-    _stop();
-    if(_round % _session === 0 && _mode === 'focus') {
+  function _changeMode() {
+    if(_mode === 'break' || _mode === 'longBreak') {
+      _mode = 'focus';
+      _remain = _focusTime;
+      _round++;
+      _stop();
+    }
+    else if(_round % _session === 0 && _mode === 'focus') {
       _mode = 'longBreak';
       _remain = _longBreakTime;
     }
@@ -44,48 +51,44 @@ const PomodoroController = (function () {
       _mode = 'break';
       _remain = _breakTime;
     }
-    if(_mode === 'break' || _mode === 'longBreak') {
-      _mode = 'focus';
-      _remain = _focusTime;
-    }
 
-    _round++;
-
-    start();
+    _onChange({ mode: _mode, round: _round, remain: _remain });
+    console.log(_remain, _mode, _round);
   }
 
   function start() {
     if(!timer) {
       _state = 'started';
-      timer = setInterval(_tick, step);
+      timer = setInterval(_tick, _step);
     }
   }
 
   function pause() {
-    _state = 'paused';
+    _state = _state === 'started' ? 'paused' : 'started';
   }
 
   function stop() {
     _stop();
   }
 
+  function setConfig({ focusLength, shortBreak, longBreak, step, onTick, onStop, onChange, goal, sessionsInRound }) {
+    _focusTime = focusLength*60 || 1500;
+    _breakTime = shortBreak*60 || 300;
+    _longBreakTime = longBreak*60 || 1800;
+    _roundsAmount = goal || 12;
+    _remain = _focusTime;
+    _session = sessionsInRound || 4;
+    _step = step || 1000;
+    _onTick = onTick;
+    _onStop = onStop;
+    _onChange = onChange;
+  }
 
 
   return {
     start,
     pause,
     stop,
-    set config({ focusTime, breakTime, longBreakTime, step, onTick, onStop, roundsAmount }) {
-      _focusTime = focusTime*60 || 1500;
-      _breakTime = breakTime*60 || 300;
-      _longBreakTime = longBreakTime*60 || 1800;
-      _roundsAmount = roundsAmount || 12;
-      _remain = focusTime;
-      _step = step || 1000;
-      _onTick = onTick;
-      _onStop = onStop;
-    }
+    setConfig
   }
-});
-
-export default PomodoroController;
+}());
