@@ -15,7 +15,7 @@ class TimerConfiguration extends Component {
     };
   };
 
-  componentWillMount() {
+  componentDidMount() {
     this.loadSettings();
   }
 
@@ -85,7 +85,7 @@ class TimerConfiguration extends Component {
       sessionsInRound,
       goal
     } = this.state;
-    
+    console.log('settings');
     return (
       <div className="timer-config config">
         <div className="config__title">

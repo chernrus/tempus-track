@@ -2,11 +2,8 @@ import React, { Component } from 'react';
 import './Pomodoro.scss';
 import { loader } from 'Utils/loader';
 import Time from 'Utils/Time';
-import Timer from 'Utils/Timer';
-import ProgressBar from 'Components/ProgressBar';
-import PomodoroControl from 'Components/PomodoroControl';
-import PomodoroTask from 'Components/PomodoroTask';
-import TimerConfiguration from 'Components/Settings/TimerConfiguration';
+import ProgressBar from '../ProgressBar';
+import PomodoroControl from '../PomodoroControl';
 import { PomodoroController as PmdrCtrl} from './PomodoroController';
 
 class Pomodoro extends Component {
@@ -141,7 +138,6 @@ class Pomodoro extends Component {
 
     return (
       <div>
-        <h2>Pomodoro (In developing)</h2>
         <ProgressBar
           strokeWidth="10"
           sqSize="200"
@@ -162,4 +158,3 @@ class Pomodoro extends Component {
 export default Pomodoro;
 
 // <PomodoroTask/>
-// <TimerConfiguration/>
